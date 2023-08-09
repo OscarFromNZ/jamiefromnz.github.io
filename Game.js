@@ -1,5 +1,5 @@
 class Game {
-    constructor(canvasId) {
+    constructor(canvasId, mode) {
         this.canvas = document.getElementById(canvasId);
         this.context = this.canvas.getContext('2d');
         this.players = [];
@@ -52,27 +52,12 @@ class Game {
         });
     }
 
-    gameOver(player) {
-        this.running = false;
-        clearInterval(this.intervalId);
+    restart() {
+
     }
 
-    restart() {
-        // clear the canvas and player trails
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        this.players[0].x = 100;
-        this.players[0].y = 100;
-        this.players[0].trail = [];
-        this.players[0].direction = 'right';
-
-        this.players[1].x = 500;
-        this.players[1].y = 500;
-        this.players[1].trail = [];
-        this.players[1].direction = 'left';
-
-        // start new game
-        this.running = true;
-        this.run();
+    gameOver() {
+        this.running = false;
+        clearInterval(this.intervalId);
     }
 }

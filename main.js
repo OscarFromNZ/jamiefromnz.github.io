@@ -1,13 +1,31 @@
-const game = new Game('gameCanvas');
+document.getElementById('singlePlayer').addEventListener('click', function () {
+    startGame('single');
+});
 
-// Add players
-const player1 = new Player(100, 100, 'right', 'blue', { 'w': 'up', 'a': 'left', 's': 'down', 'd': 'right' });
-const player2 = new Player(500, 500, 'left', 'red', { 'ArrowUp': 'up', 'ArrowLeft': 'left', 'ArrowDown': 'down', 'ArrowRight': 'right' });
-game.addPlayer(player1);
-game.addPlayer(player2);
+document.getElementById('twoPlayer').addEventListener('click', function () {
+    startGame('two-player');
+});
 
-// Run game
-game.run();
+document.getElementById('sandbox').addEventListener('click', function () {
+    startGame('sandbox');
+});
+
+let game;
+
+function startGame(mode) {
+    switch (mode) {
+        case 'single':
+            game = new SinglePlayerGame('gameCanvas');
+            break;
+        case 'two-player':
+            game = new TwoPlayerGame('gameCanvas');
+            break;
+        case 'sandbox':
+            game = new SandboxGame('gameCanvas');
+            break;
+    }
+    game.run();
+}
 
 window.addEventListener('keydown', (event) => {
     if (game.running) {

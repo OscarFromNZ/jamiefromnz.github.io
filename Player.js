@@ -6,29 +6,28 @@ class Player {
         this.color = color;
         this.trail = [];
         this.keys = keys;
-        this.speed = 10;
-        this.size = 10;
+        this.gridSize = 20;
     }
 
     updatePosition() {
         switch (this.direction) {
             case 'up':
-                this.y = this.y - this.speed;
+                this.y = this.y - this.gridSize
                 break;
             case 'down':
-                this.y = this.y + this.speed;;
+                this.y = this.y + this.gridSize;
                 break;
             case 'left':
-                this.x = this.x - this.speed;
+                this.x = this.x - this.gridSize;
                 break;
             case 'right':
-                this.x = this.x + this.speed;
+                this.x = this.x + this.gridSize;
                 break;
         }
 
         // Round to nearest multiple of 10, should already be a multiple of 10
-        this.x = Math.ceil(this.x / 10) * 10;
-        this.y = Math.ceil(this.y / 10) * 10;
+        this.x = Math.ceil(this.x / this.gridSize) * this.gridSize;
+        this.y = Math.ceil(this.y / this.gridSize) * this.gridSize;
     }
 
     updateTrail() {
@@ -38,7 +37,7 @@ class Player {
     draw(context) {
         context.fillStyle = this.color;
         this.trail.forEach(pos => {
-            context.fillRect(pos.x, pos.y, this.size, this.size);
+            context.fillRect(pos.x, pos.y, this.gridSize, this.gridSize);
         });
     }
 
