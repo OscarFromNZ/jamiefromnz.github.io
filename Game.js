@@ -1,13 +1,18 @@
 class Game {
-    constructor(canvasId, mode) {
+    constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.context = this.canvas.getContext('2d');
         this.players = [];
+        this.food = [];
         this.running = true;
     }
 
     addPlayer(player) {
         this.players.push(player);
+    }
+
+    addFood(food) {
+        this.food.push(food);
     }
 
     update() {
@@ -19,6 +24,7 @@ class Game {
     draw() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.players.forEach(player => player.draw(this.context));
+        this.food.forEach(foodItem => foodItem.draw(this.context));
     }
 
     run() {
@@ -49,15 +55,55 @@ class Game {
                     }
                 });
             });
+
+            this.food.forEach((foodItem, index) => {
+                if (player.x === foodItem.x && player.y === foodItem.y) {
+                    foodItem.eat(player); // Apply the effect of the food
+                    this.food.splice(index, 1); // Remove the food from the game
+                }
+            });
         });
     }
 
-    restart() {
-
+    gameOver(player) {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.running = false;
     }
 
-    gameOver() {
-        this.running = false;
+    restart() {
+        // Stop the current game loop
         clearInterval(this.intervalId);
+
+        // Reset the game state
+        this.players = [];
+        this.food = [];
+
+        this.running = true;
+
+        this.start();
+
+        // Start the game loop again
+        this.run();
+    }
+
+    generateRandomFood() {
+        let foods = ['SpeedBoost'];
+
+        // Generate random x and y coordinates within the canvas
+        const x = Math.floor(Math.random() * ((this.canvas.width - 20) / 10)) * 10;
+        const y = Math.floor(Math.random() * ((this.canvas.height - 20) / 10)) * 10;
+        const foodIndex = Math.floor(Math.random() * foods.length);
+
+        let food;
+
+        switch (foods[foodIndex]) {
+            case 'SpeedBoost':
+                food = new SpeedBoost(x, y, 20);
+                break;
+
+        }
+
+        // Add the food to the game
+        this.addFood(food);
     }
 }

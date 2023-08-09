@@ -1,29 +1,26 @@
 document.getElementById('singlePlayer').addEventListener('click', function () {
-    startGame('single');
+    startGame('single-player');
 });
 
 document.getElementById('twoPlayer').addEventListener('click', function () {
     startGame('two-player');
 });
 
-document.getElementById('sandbox').addEventListener('click', function () {
-    startGame('sandbox');
-});
-
 let game;
 
 function startGame(mode) {
+    // Hide the start menu
+    document.getElementById('startMenu').style.display = 'none';
+
     switch (mode) {
-        case 'single':
-            game = new SinglePlayerGame('gameCanvas');
+        case 'single-player':
+            game = new SinglePlayerMode('gameCanvas');
             break;
         case 'two-player':
-            game = new TwoPlayerGame('gameCanvas');
-            break;
-        case 'sandbox':
-            game = new SandboxGame('gameCanvas');
+            game = new TwoPlayerMode('gameCanvas');
             break;
     }
+    game.start();
     game.run();
 }
 
