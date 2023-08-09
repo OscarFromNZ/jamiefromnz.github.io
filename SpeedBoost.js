@@ -4,9 +4,12 @@ class SpeedBoost extends Food {
     }
 
     eat(player, game) {
-        console.log('Speed boost eaten');
         game.generateRandomFood();
 
-        player.speed *= 2;
+        player.speed = 2;
+
+        setInterval(function() {
+            player.speed = 1;
+        }, 1000)
     }
 }

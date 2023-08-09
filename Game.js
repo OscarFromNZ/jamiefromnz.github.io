@@ -58,8 +58,8 @@ class Game {
 
             this.food.forEach((foodItem, index) => {
                 if (player.x === foodItem.x && player.y === foodItem.y) {
-                    foodItem.eat(player); // Apply the effect of the food
-                    this.food.splice(index, 1); // Remove the food from the game
+                    foodItem.eat(player, this);
+                    this.food.splice(index, 1);
                 }
             });
         });
@@ -90,10 +90,9 @@ class Game {
         let foods = ['SpeedBoost'];
 
         // Generate random x and y coordinates within the canvas
-        const x = Math.floor(Math.random() * ((this.canvas.width - 20) / 10)) * 10;
-        const y = Math.floor(Math.random() * ((this.canvas.height - 20) / 10)) * 10;
+        const x = Math.floor(Math.random() * ((this.canvas.width - 20) / 20)) * 20;
+        const y = Math.floor(Math.random() * ((this.canvas.height - 20) / 20)) * 20;
         const foodIndex = Math.floor(Math.random() * foods.length);
-
         let food;
 
         switch (foods[foodIndex]) {

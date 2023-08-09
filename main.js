@@ -6,11 +6,11 @@ document.getElementById('twoPlayer').addEventListener('click', function () {
     startGame('two-player');
 });
 
-let game;
-
 function startGame(mode) {
     // Hide the start menu
     document.getElementById('startMenu').style.display = 'none';
+
+    let game;
 
     switch (mode) {
         case 'single-player':
@@ -22,12 +22,12 @@ function startGame(mode) {
     }
     game.start();
     game.run();
-}
 
-window.addEventListener('keydown', (event) => {
-    if (game.running) {
-        game.handleInput(event.key);
-    } else {
-        game.restart();
-    }
-});
+    window.addEventListener('keydown', (event) => {
+        if (game.running) {
+            game.handleInput(event.key);
+        } else {
+            game.restart();
+        }
+    });
+}

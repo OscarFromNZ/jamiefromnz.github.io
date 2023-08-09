@@ -21,6 +21,5 @@ class SinglePlayerMode extends Game {
 
     draw() {
         super.draw();
-
     }
 }
