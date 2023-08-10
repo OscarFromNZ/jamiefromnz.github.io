@@ -6,6 +6,10 @@ document.getElementById('twoPlayer').addEventListener('click', function () {
     startGame('two-player');
 });
 
+
+document.getElementById('ai').addEventListener('click', function () {
+    startGame('ai');
+});
 function startGame(mode) {
     // Hide the start menu
     document.getElementById('startMenu').style.display = 'none';
@@ -18,6 +22,9 @@ function startGame(mode) {
             break;
         case 'two-player':
             game = new TwoPlayerMode('gameCanvas');
+            break;
+        case 'ai':
+            game = new AIPlayerMode('gameCanvas');
             break;
     }
     game.start();
