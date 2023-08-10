@@ -9,6 +9,7 @@ class Player {
         this.gridSize = 20;
 
         this.hasBomb = false;
+        this.hasAnchor = false;
         this.speed = 1;
     }
 

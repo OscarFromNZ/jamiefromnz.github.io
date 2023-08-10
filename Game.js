@@ -23,7 +23,7 @@ class Game {
             player.updateTrail();
         });
 
-        this.players.filter(player => player instanceof AIPlayer).forEach(aiPlayer => aiPlayer.moveRandomly());
+        this.players.filter(player => player instanceof AIPlayer).forEach(aiPlayer => aiPlayer.moveSmartly(this));
     }
 
     draw() {
@@ -51,9 +51,17 @@ class Game {
             if (player.x < 0 || player.y < 0 || player.x >= this.canvas.width || player.y >= this.canvas.height) {
                 this.gameOver(player);
             }
+
+            this.food.forEach((foodItem, index) => {
+                if (player.x === foodItem.x && player.y === foodItem.y) {
+                    foodItem.eat(player, this);
+                    this.food.splice(index, 1);
+                }
+            });
     
             // Check if player is on another player's trail
             this.players.forEach(otherPlayer => {
+                if (player.hasAnchor) return;
                 for (let i = 0; i < otherPlayer.trail.length - 1; i++) {
                     const trailPos = otherPlayer.trail[i];
     
@@ -69,15 +77,17 @@ class Game {
                     }
                 }
             });
-    
-            this.food.forEach((foodItem, index) => {
-                if (player.x === foodItem.x && player.y === foodItem.y) {
-                    foodItem.eat(player, this);
-                    this.food.splice(index, 1);
-                }
-            });
         });
-    }    
+    }
+    
+    // probably could do this better
+    willCollideWithOthers(nextX, nextY, excludePlayer) {
+        return this.players.some(player => {
+            if (player === excludePlayer) return false;
+
+            return player.trail.some(trailPos => trailPos.x === nextX && trailPos.y === nextY);
+        });
+    }
 
     gameOver(player) {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -103,7 +113,7 @@ class Game {
     }
 
     generateRandomFood() {
-        let foods = ['SpeedBoost', 'Bomb', 'Anchor'];
+        let foods = ['SpeedBoost', 'Bomb'];
 
         // Generate random x and y coordinates within the canvas
         const x = Math.floor(Math.random() * ((this.canvas.width - 20) / 20)) * 20;
@@ -117,9 +127,6 @@ class Game {
                 break;
             case 'Bomb':
                 food = new Bomb(x, y, 20);
-                break;
-            case 'Anchor':
-                food = new Anchor(x, y, 20);
                 break;
         }
 
