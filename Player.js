@@ -35,6 +35,7 @@ class Player {
 
     updateTrail() {
         this.trail.push({ x: this.x, y: this.y });
+        console.log(this.trail);
     }
 
     draw(context) {
@@ -44,7 +45,7 @@ class Player {
             if (this.speed !== 1) {
                 context.fillStyle = 'green';
                 context.fillRect(pos.x, pos.y, this.gridSize, this.gridSize);
-                context.fillStyle = this.color;
+                context.fillStyle = this.colour;
             }
         });
         */
@@ -72,8 +73,38 @@ class Player {
 
     handleInput(key) {
         const newDirection = this.keys[key];
-        if (newDirection) {
+
+        // Check if new direction is opposite of current direction
+        if (!this.isOppositeDirection(this.direction, newDirection)) {
             this.direction = newDirection;
+        }
+    }
+
+    isOppositeDirection(oldDirection, newDirection) {
+        return (newDirection == this.getOppositeDirection(oldDirection))
+    }
+
+    getOppositeDirection(direction) {
+        switch (direction) {
+            case 'up':
+                return 'down';
+            case 'down':
+                return 'up';
+            case 'left':
+                return 'right';
+            case 'right':
+                return 'left';
+            default:
+                return '';
+        }
+    }
+
+    moveRandomly() {
+        const directions = ['up', 'down', 'left', 'right'];
+        const randomIndex = Math.floor(Math.random() * directions.length);
+
+        if (!this.isOppositeDirection(this.direction, directions[randomIndex])) {
+            this.direction = directions[randomIndex];
         }
     }
 }

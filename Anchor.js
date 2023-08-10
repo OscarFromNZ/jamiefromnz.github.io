@@ -8,6 +8,8 @@ class Anchor extends Food {
 
         player.speed = 0;
 
+        game.alert(`${player.colour.toUpperCase()} got the anchor!`);
+
         setInterval(function() {
             player.speed = 1;
         }, 1000);

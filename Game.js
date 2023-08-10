@@ -17,6 +17,7 @@ class Game {
 
     update() {
         this.players.forEach(player => player.updatePosition());
+        this.players.filter(player => player instanceof AIPlayer).forEach(aiPlayer => aiPlayer.moveRandomly());
         this.checkCollision();
         this.players.forEach(player => player.updateTrail());
     }
@@ -28,6 +29,7 @@ class Game {
     }
 
     run() {
+        console.log(this.running);
         this.intervalId = setInterval(() => {
             if (this.running) {
                 this.update();
@@ -46,25 +48,25 @@ class Game {
             if (player.x < 0 || player.y < 0 || player.x >= this.canvas.width || player.y >= this.canvas.height) {
                 this.gameOver(player);
             }
-
+    
             // Check if player is on another player's trail
             this.players.forEach(otherPlayer => {
-                for (let i = 1; i < otherPlayer.trail.length; i++) {
-                    const prevPos = otherPlayer.trail[i - 1];
-                    const currPos = otherPlayer.trail[i];
-
-                    // Check if the player's current position is on the line between prevPos and currPos
-                    if (this.isPointOnLine(player.x, player.y, prevPos.x, prevPos.y, currPos.x, currPos.y)) {
+                for (let i = 0; i < otherPlayer.trail.length - 1; i++) {
+                    const trailPos = otherPlayer.trail[i];
+    
+                    // Check if the player's current position matches the trail position
+                    if (player.x === trailPos.x && player.y === trailPos.y) {
                         if (player.hasBomb) {
-                            otherPlayer.context.strokeStyle = 'tomato';
+                            this.context.strokeStyle = 'tomato';
                             otherPlayer.trail.splice(i, 1);
+                            player.hasBomb = false;
                         } else {
                             this.gameOver(player);
                         }
                     }
                 }
             });
-
+    
             this.food.forEach((foodItem, index) => {
                 if (player.x === foodItem.x && player.y === foodItem.y) {
                     foodItem.eat(player, this);
@@ -72,16 +74,7 @@ class Game {
                 }
             });
         });
-    }
-
-    // some chat gpt stuff
-    isPointOnLine(px, py, x1, y1, x2, y2) {
-        let tolerance = 1;
-        let dist1 = Math.sqrt((x1 - px) ** 2 + (y1 - py) ** 2);
-        let dist2 = Math.sqrt((x2 - px) ** 2 + (y2 - py) ** 2);
-        let lineDist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-        return Math.abs(dist1 + dist2 - lineDist) < tolerance;
-    }
+    }    
 
     gameOver(player) {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -127,5 +120,17 @@ class Game {
 
         // Add the food to the game
         this.addFood(food);
+    }
+
+    alert(message) {
+        const alertBox = document.getElementById('alert');
+        const alertMessage = document.getElementById('alertMessage');
+        alertMessage.textContent = message;
+        alertBox.className = 'alert-visible';
+
+        setInterval(() => {
+            const alertBox = document.getElementById('alert');
+            alertBox.className = 'alert-hidden';
+        }, 3000);
     }
 }
