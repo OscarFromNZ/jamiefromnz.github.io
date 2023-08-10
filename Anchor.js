@@ -1,12 +1,12 @@
-class SpeedBoost extends Food {
+class Anchor extends Food {
     constructor(x, y, size) {
-        super(x, y, size, 'green');
+        super(x, y, size, 'blue');
     }
 
     eat(player, game) {
         game.generateRandomFood();
 
-        player.speed = 2;
+        player.speed = 0;
 
         setInterval(function() {
             player.speed = 1;
