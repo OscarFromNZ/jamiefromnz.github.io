@@ -13,6 +13,7 @@ class Player {
     }
 
     updatePosition() {
+        console.log(this.direction);
         switch (this.direction) {
             case 'up':
                 this.y = this.y - this.gridSize * this.speed;
@@ -35,21 +36,9 @@ class Player {
 
     updateTrail() {
         this.trail.push({ x: this.x, y: this.y });
-        console.log(this.trail);
     }
 
     draw(context) {
-        /*
-        this.trail.forEach(pos => {
-            context.fillRect(pos.x, pos.y, this.gridSize, this.gridSize);
-            if (this.speed !== 1) {
-                context.fillStyle = 'green';
-                context.fillRect(pos.x, pos.y, this.gridSize, this.gridSize);
-                context.fillStyle = this.colour;
-            }
-        });
-        */
-
         if (this.speed === 2) {
             context.strokeStyle = 'greenyellow';
         }
@@ -58,7 +47,7 @@ class Player {
             const prevPos = this.trail[i - 1];
             const currPos = this.trail[i];
 
-            context.lineWidth = 20;
+            context.lineWidth = 10;
 
             // Draw a line between the previous position and the current position
             context.beginPath();
@@ -73,6 +62,8 @@ class Player {
 
     handleInput(key) {
         const newDirection = this.keys[key];
+
+        if (!newDirection) return;
 
         // Check if new direction is opposite of current direction
         if (!this.isOppositeDirection(this.direction, newDirection)) {

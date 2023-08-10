@@ -16,10 +16,14 @@ class Game {
     }
 
     update() {
-        this.players.forEach(player => player.updatePosition());
-        this.players.filter(player => player instanceof AIPlayer).forEach(aiPlayer => aiPlayer.moveRandomly());
         this.checkCollision();
-        this.players.forEach(player => player.updateTrail());
+        
+        this.players.forEach((player) => {
+            player.updatePosition();
+            player.updateTrail();
+        });
+
+        this.players.filter(player => player instanceof AIPlayer).forEach(aiPlayer => aiPlayer.moveRandomly());
     }
 
     draw() {
@@ -29,7 +33,6 @@ class Game {
     }
 
     run() {
-        console.log(this.running);
         this.intervalId = setInterval(() => {
             if (this.running) {
                 this.update();
@@ -79,6 +82,8 @@ class Game {
     gameOver(player) {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.running = false;
+
+        this.alert("Someone died.");
     }
 
     restart() {
