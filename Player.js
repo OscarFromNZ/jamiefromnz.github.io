@@ -48,7 +48,7 @@ class Player {
             const prevPos = this.trail[i - 1];
             const currPos = this.trail[i];
 
-            context.lineWidth = 10;
+            context.lineWidth = 20;
 
             // Draw a line between the previous position and the current position
             context.beginPath();

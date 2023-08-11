@@ -80,7 +80,7 @@ class Game {
         });
     }
     
-    // probably could do this better
+    // probably could do this better (with using the same function or something idk, maybe I could use it with checkCOllision somehow)
     willCollideWithOthers(nextX, nextY, excludePlayer) {
         return this.players.some(player => {
             if (player === excludePlayer) return false;

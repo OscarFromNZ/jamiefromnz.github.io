@@ -6,7 +6,7 @@ class AIPlayer extends Player {
 
     moveSmartly(game) {
         const directions = ['up', 'down', 'left', 'right'];
-        let bestDirection = this.direction;
+        let validDirections = [];
 
         // Evaluate each possible direction
         directions.forEach(direction => {
@@ -29,14 +29,18 @@ class AIPlayer extends Player {
                     break;
             }
 
-            // Check for collisions with self, other players, and walls
-            if (this.willCollideWithSelf(nextX, nextY) || game.willCollideWithOthers(nextX, nextY, this) || this.isOutsideCanvas(nextX, nextY, game.canvas.width, game.canvas.height)) {
-                return;
+            if (!this.willCollideWithSelf(nextX, nextY) && !game.willCollideWithOthers(nextX, nextY, this) && !this.isOutsideCanvas(nextX, nextY, game.canvas.width, game.canvas.height)) {
+                validDirections.push(direction);
             }
-            bestDirection = direction;
         });
 
-        this.direction = bestDirection;
+        if (Math.random() < 0.75) {
+            if (!validDirections.includes(this.direction)) {
+                this.direction = validDirections[Math.floor(Math.random() * validDirections.length)];
+            }
+        } else {
+            this.direction = validDirections[Math.floor(Math.random() * validDirections.length)];
+        }
     }
 
     willCollideWithSelf(nextX, nextY) {
