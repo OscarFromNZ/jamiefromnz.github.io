@@ -1,5 +1,5 @@
 class Player {
-    constructor(x, y, direction, colour, keys) {
+    constructor(x, y, direction, colour, keys, game) {
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -8,6 +8,9 @@ class Player {
         this.keys = keys;
         this.gridSize = 20;
 
+        this.game = game;
+
+        this.isSentry = true;
         this.hasBomb = false;
         this.hasAnchor = false;
         this.speed = 1;
@@ -62,13 +65,24 @@ class Player {
     }
 
     handleInput(key) {
-        const newDirection = this.keys[key];
+        // Detect if the player is shooting, maybe a better way of doing this
+        if (key === 'c' && this.keys.c) {
+            if (this.isSentry) {
+                this.shoot();
+            }
+        } else if (key === 'm' && this.keys.m) {
+            if (this.isSentry) {
+                this.shoot();
+            }
+        } else {
+            const newDirection = this.keys[key];
 
-        if (!newDirection) return;
-
-        // Check if new direction is opposite of current direction
-        if (!this.isOppositeDirection(this.direction, newDirection)) {
-            this.direction = newDirection;
+            if (!newDirection) return;
+    
+            // Check if new direction is opposite of current direction
+            if (!this.isOppositeDirection(this.direction, newDirection)) {
+                this.direction = newDirection;
+            }
         }
     }
 
@@ -98,5 +112,11 @@ class Player {
         if (!this.isOppositeDirection(this.direction, directions[randomIndex])) {
             this.direction = directions[randomIndex];
         }
+    }
+
+    shoot() {
+        console.log('shooting');
+        let bullet = new Bullet(this.x, this.y, this.direction, 2, this.gridSize);
+        this.game.addBullet(bullet);
     }
 }
