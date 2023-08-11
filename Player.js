@@ -10,7 +10,7 @@ class Player {
 
         this.game = game;
 
-        this.isSentry = true;
+        this.bullets = 0;
         this.hasBomb = false;
         this.hasAnchor = false;
         this.speed = 1;
@@ -67,11 +67,11 @@ class Player {
     handleInput(key) {
         // Detect if the player is shooting, maybe a better way of doing this
         if (key === 'c' && this.keys.c) {
-            if (this.isSentry) {
+            if (this.bullets > 0) {
                 this.shoot();
             }
         } else if (key === 'm' && this.keys.m) {
-            if (this.isSentry) {
+            if (this.bullets > 0) {
                 this.shoot();
             }
         } else {
@@ -118,5 +118,6 @@ class Player {
         console.log('shooting');
         let bullet = new Bullet(this.x, this.y, this.direction, 2, this.gridSize);
         this.game.addBullet(bullet);
+        this.bullets -= 1;
     }
 }

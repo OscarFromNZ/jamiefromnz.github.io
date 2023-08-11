@@ -6,12 +6,8 @@ class Sentry extends Food {
     eat(player, game) {
         game.generateRandomFood();
 
-        player.isSentry = true;
+        player.bullets += 10;
 
-        game.alert(`${player.colour.toUpperCase()} got the sentry!`);
-
-        setInterval(function() {
-            player.isSentry = false;
-        }, 1000);
+        game.alert(`${player.colour.toUpperCase()} got 10 bullets!`);
     }
 }
