@@ -34,11 +34,7 @@ class AIPlayer extends Player {
             }
         });
 
-        if (Math.random() < 0.75) {
-            if (!validDirections.includes(this.direction)) {
-                this.direction = validDirections[Math.floor(Math.random() * validDirections.length)];
-            }
-        } else {
+        if (!validDirections.includes(this.direction)) {
             this.direction = validDirections[Math.floor(Math.random() * validDirections.length)];
         }
     }

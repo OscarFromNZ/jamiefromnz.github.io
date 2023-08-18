@@ -6,7 +6,7 @@ class Bomb extends Food {
     eat(player, game) {
         game.generateRandomFood();
 
-        player.hasBomb = true;
+        player.bombs += 1;
 
         game.alert(`${player.colour.toUpperCase()} got the bomb!`);
     }

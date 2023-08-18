@@ -76,10 +76,10 @@ class Game {
 
                     // Check if the player's current position matches the trail position
                     if (player.x === trailPos.x && player.y === trailPos.y) {
-                        if (player.hasBomb) {
+                        if (player.bombs > 0) {
                             this.context.strokeStyle = 'tomato';
                             otherPlayer.trail.splice(i, 1);
-                            player.hasBomb = false;
+                            player.bombs -= 1;
                         } else {
                             this.gameOver(player);
                         }

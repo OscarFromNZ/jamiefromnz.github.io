@@ -1,4 +1,4 @@
-class SinglePlayerMode extends Game {
+class TwoPlayerMode extends Game {
     constructor(canvasId) {
         super(canvasId);
     }
@@ -9,8 +9,8 @@ class SinglePlayerMode extends Game {
     }
 
     start() {
-        const player1 = new Player(100, 100, 'right', 'blue', { 'w': 'up', 'a': 'left', 's': 'down', 'd': 'right', 'c': 'shoot' }, this);
-        this.addPlayer(player1);
+        createAndAddPlayer();
+        createAndAddPlayer();
 
         this.generateRandomFood();
         this.generateRandomFood();
@@ -22,5 +22,6 @@ class SinglePlayerMode extends Game {
 
     draw() {
         super.draw();
+
     }
 }

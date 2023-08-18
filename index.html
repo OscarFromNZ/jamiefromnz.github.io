@@ -14,20 +14,23 @@
       </div>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
 
-    <script src="Player.js"></script>
-    <script src="Bullet.js"></script>
-    <script src="AIPlayer.js"></script>
+    <button onclick="createAndAddAI()">Add AI player</button>
+    <button onclick="createAndAddPlayer()">Add player (max 2)</button>
+
+    <script src="entities/Player.js"></script>
+    <script src="entities/Bullet.js"></script>
+    <script src="entities/AIPlayer.js"></script>
 
     <script src="Game.js"></script>
 
-    <script src="SinglePlayerMode.js"></script>
-    <script src="TwoPlayerMode.js"></script>
-    <script src="AIPlayerMode.js"></script>
+    <script src="modes/SinglePlayerMode.js"></script>
+    <script src="modes/TwoPlayerMode.js"></script>
+    <script src="modes/AIPlayerMode.js"></script>
 
-    <script src="Food.js"></script>
-    <script src="SpeedBoost.js"></script>
-    <script src="Bomb.js"></script>
-    <script src="Sentry.js"></script>
+    <script src="entities/Food.js"></script>
+    <script src="entities/SpeedBoost.js"></script>
+    <script src="entities/Bomb.js"></script>
+    <script src="entities/Sentry.js"></script>
     
     <script src="main.js"></script>
 </body>

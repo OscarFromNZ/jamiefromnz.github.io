@@ -10,11 +10,12 @@ document.getElementById('twoPlayer').addEventListener('click', function () {
 document.getElementById('ai').addEventListener('click', function () {
     startGame('ai');
 });
+
+let game;
+
 function startGame(mode) {
     // Hide the start menu
     document.getElementById('startMenu').style.display = 'none';
-
-    let game;
 
     switch (mode) {
         case 'single-player':
@@ -37,4 +38,19 @@ function startGame(mode) {
             game.restart();
         }
     });
+}
+
+function createAndAddAI() {
+    const aiPlayer = new AIPlayer(400, 400, 'up', 'pink', {}, game);
+    game.addPlayer(aiPlayer);
+}
+
+function createAndAddPlayer() {
+    if (game.players.length === 1) {
+        const player = new Player(100, 100, 'right', 'blue', { 'w': 'up', 'a': 'left', 's': 'down', 'd': 'right', 'c': 'shoot' }, game);
+        game.addPlayer(player);
+    } else {
+        const player = new Player(500, 500, 'left', 'red', { 'ArrowUp': 'up', 'ArrowLeft': 'left', 'ArrowDown': 'down', 'ArrowRight': 'right', 'm': 'shoot' }, game);
+        game.addPlayer(player);
+    }
 }

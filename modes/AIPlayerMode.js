@@ -9,11 +9,8 @@ class AIPlayerMode extends Game {
     }
 
     start() {
-        const player1 = new Player(100, 100, 'right', 'blue', { 'w': 'up', 'a': 'left', 's': 'down', 'd': 'right', 'c': 'shoot' }, this);
-        this.addPlayer(player1);
-
-        const aiPlayer = new AIPlayer(400, 400, 'up', 'pink', {}, this);
-        this.addPlayer(aiPlayer);
+        createAndAddPlayer();
+        createAndAddAI();
 
         this.generateRandomFood();
         this.generateRandomFood();

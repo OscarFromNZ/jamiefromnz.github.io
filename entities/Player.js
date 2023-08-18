@@ -11,7 +11,7 @@ class Player {
         this.game = game;
 
         this.bullets = 0;
-        this.hasBomb = false;
+        this.bombs = 0;
         this.hasAnchor = false;
         this.speed = 1;
     }
