@@ -6,6 +6,8 @@ class Game {
         this.food = [];
         this.bullets = [];
         this.running = true;
+
+        this.foodsEaten = 0;
     }
 
     addPlayer(player) {
@@ -89,11 +91,24 @@ class Game {
 
             // check if a bullet has hit a player
             this.bullets.forEach((bullet, bulletIndex) => {
-                for (let i = 0; i < player.trail.length - 1; i++) {
-                    const trailPos = player.trail[i];
+                // for each player
+                for (let player of this.players) {
+                    // if it didn't hit the person who shot it
+                    if (player !== bullet.player) {
+                        // but did hit the other player
+                        if (bullet.x == player.x && bullet.y == player.y) {
+                            this.gameOver(player);
+                            this.bullets.splice(bulletIndex, 1);
+                        }
+                    }
 
-                    if (bullet.x === trailPos.x && bullet.y === trailPos.y) {
-                        this.bullets.splice(bulletIndex, 1);
+                    // for every trail
+                    for (let i = 0; i < player.trail.length - 1; i++) {
+                        let trail = player.trail[i];
+                        if (bullet.x == trail.x && bullet.y == trail.y) {
+                            player.trail.splice(i, 1);
+                            this.bullets.splice(bulletIndex, 1);
+                        }
                     }
                 }
 
@@ -117,7 +132,7 @@ class Game {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.running = false;
 
-        this.alert("Someone died.");
+        this.alert(player.colour + " died.");
     }
 
     restart() {
@@ -130,7 +145,7 @@ class Game {
 
         this.running = true;
 
-        this.start();
+        //this.start();
 
         // Start the game loop again
         this.run();

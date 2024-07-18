@@ -116,7 +116,7 @@ class Player {
 
     shoot() {
         console.log('shooting');
-        let bullet = new Bullet(this.x, this.y, this.direction, 2, this.gridSize);
+        let bullet = new Bullet(this.x, this.y, this.direction, 2, this.gridSize, this);
         this.game.addBullet(bullet);
         this.bullets -= 1;
     }

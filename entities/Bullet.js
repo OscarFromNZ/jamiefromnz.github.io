@@ -1,10 +1,11 @@
 class Bullet {
-    constructor(x, y, direction, speed, gridSize) {
+    constructor(x, y, direction, speed, gridSize, player) {
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.speed = speed;
         this.gridSize = gridSize;
+        this.player = player; // the player who shot it
     }
 
     updatePosition() {
