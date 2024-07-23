@@ -1,6 +1,6 @@
 class AIPlayer extends Player {
-    constructor(x, y, direction, colour, keys) {
-        super(x, y, direction, colour, keys);
+    constructor(x, y, direction, colour, keys, game) {
+        super(x, y, direction, colour, keys, game);
         this.isAI = true;
     }
 

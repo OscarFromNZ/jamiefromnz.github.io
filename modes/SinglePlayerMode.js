@@ -8,12 +8,14 @@ class SinglePlayerMode extends Game {
 
     }
 
+    // duped code
     start() {
         createAndAddPlayer();
 
-        this.generateRandomFood();
-        this.generateRandomFood();
-        this.generateRandomFood();
+        for (let i = 0; i < 10; i++) {
+            this.generateRandomFood();
+
+        }
     }
 
     run() {

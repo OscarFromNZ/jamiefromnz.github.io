@@ -154,7 +154,7 @@ class Player {
 
         setTimeout(() => {
             this.speed = 1;
-        }, 1000);
+        }, 2000);
 
         this.speedboosts--;
     }
