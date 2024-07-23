@@ -69,6 +69,12 @@ class Player {
 
         context.shadowColor = 'transparent';
         context.shadowBlur = 0;
+
+        // draw bike separately MORE BAD CODE CUZ DUPLICATION
+
+        context.beginPath();
+        context.rect(this.x, this.y, this.gridSize, this.gridSize);
+        context.stroke();
     }
 
     // BAD CODE
