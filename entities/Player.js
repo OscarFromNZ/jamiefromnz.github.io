@@ -44,23 +44,27 @@ class Player {
     }
 
     draw(context) {
+        const shadowIntensity = Math.random() * 10 + 5;
+        const shadowFlicker = Math.random() > 0.9 ? 'rgba(0, 0, 0, 0)' : this.speed === 2 ? 'greenyellow' : this.colour;
+
+        context.shadowColor = shadowFlicker;
+        context.shadowBlur = shadowIntensity;
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+
         context.strokeStyle = this.colour;
-
-        // Set stroke style based on speed
-        if (this.speed === 2) {
-            context.strokeStyle = 'greenyellow';
-        }
-
         context.lineWidth = 1;
 
         for (let i = 0; i < this.trail.length; i++) {
             const pos = this.trail[i];
 
-            // Draw a box at each trail position
             context.beginPath();
             context.rect(pos.x, pos.y, this.gridSize, this.gridSize);
             context.stroke();
         }
+
+        context.shadowColor = 'transparent';
+        context.shadowBlur = 0;
     }
 
     // MAKE THIS USE CONSTANTS
