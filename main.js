@@ -45,12 +45,13 @@ function createAndAddAI() {
     game.addPlayer(aiPlayer);
 }
 
+// KEYS DONT WORK
 function createAndAddPlayer() {
     if (game.players.length === 1) {
         const player = new Player(100, 100, 'right', 'blue', { 'w': 'up', 'a': 'left', 's': 'down', 'd': 'right', 'c': 'shoot' }, game);
         game.addPlayer(player);
     } else {
-        const player = new Player(500, 500, 'left', 'red', { 'ArrowUp': 'up', 'ArrowLeft': 'left', 'ArrowDown': 'down', 'ArrowRight': 'right', 'm': 'shoot' }, game);
+        const player = new Player(500, 500, 'left', 'red', { 'ArrowUp': 'up', 'ArrowLeft': 'left', 'ArrowDown': 'down', 'ArrowRight': 'right', 'Shift': 'shoot' }, game);
         game.addPlayer(player);
     }
 }

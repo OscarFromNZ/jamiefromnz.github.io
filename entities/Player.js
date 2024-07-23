@@ -11,6 +11,7 @@ class Player {
         this.game = game;
 
         this.bullets = 0;
+        this.speedboosts = 0;
         this.bombs = 0;
         this.hasAnchor = false;
         this.speed = 1;
@@ -64,21 +65,27 @@ class Player {
         context.strokeStyle = this.colour;
     }
 
+    // MAKE THIS USE CONSTANTS
     handleInput(key) {
         // Detect if the player is shooting, maybe a better way of doing this
         if (key === 'c' && this.keys.c) {
             if (this.bullets > 0) {
                 this.shoot();
             }
-        } else if (key === 'm' && this.keys.m) {
+        } else if (key === 'Shift') {
             if (this.bullets > 0) {
                 this.shoot();
             }
+        } else if (key === ' ') {
+            if (this.speedboosts > 0) {
+                this.speedboost();
+            }
+
         } else {
             const newDirection = this.keys[key];
 
             if (!newDirection) return;
-    
+
             // Check if new direction is opposite of current direction
             if (!this.isOppositeDirection(this.direction, newDirection)) {
                 this.direction = newDirection;
@@ -119,5 +126,17 @@ class Player {
         let bullet = new Bullet(this.x, this.y, this.direction, 2, this.gridSize, this);
         this.game.addBullet(bullet);
         this.bullets -= 1;
+    }
+
+    speedboost() {
+        this.speed = 2;
+
+        game.alert(`${this.colour.toUpperCase()} got the speedboost!`);
+
+        setTimeout(() => {
+            this.speed = 1;
+        }, 1000);
+
+        this.speedboosts--;
     }
 }
