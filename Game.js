@@ -7,6 +7,8 @@ class Game {
         this.bullets = [];
         this.running = true;
 
+        this.gridSize = 10;
+
         this.foodsEaten = 0;
     }
 
@@ -164,20 +166,20 @@ class Game {
         let foods = ['SpeedBoost', 'Bomb', 'Sentry'];
 
         // Generate random x and y coordinates within the canvas
-        const x = Math.floor(Math.random() * ((this.canvas.width - 20) / 20)) * 20;
-        const y = Math.floor(Math.random() * ((this.canvas.height - 20) / 20)) * 20;
+        const x = Math.floor(Math.random() * ((this.canvas.width - this.gridSize) / this.gridSize)) * this.gridSize;
+        const y = Math.floor(Math.random() * ((this.canvas.height - this.gridSize) / this.gridSize)) * this.gridSize;
         const foodIndex = Math.floor(Math.random() * foods.length);
         let food;
 
         switch (foods[foodIndex]) {
             case 'SpeedBoost':
-                food = new SpeedBoost(x, y, 20);
+                food = new SpeedBoost(x, y, this.gridSize);
                 break;
             case 'Bomb':
-                food = new Bomb(x, y, 20);
+                food = new Bomb(x, y, this.gridSize);
                 break;
             case 'Sentry':
-                food = new Sentry(x, y, 20);
+                food = new Sentry(x, y, this.gridSize);
                 break;
         }
 

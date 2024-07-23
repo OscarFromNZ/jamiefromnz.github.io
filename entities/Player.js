@@ -6,8 +6,8 @@ class Player {
         this.colour = colour;
         this.trail = [];
         this.keys = keys;
-        this.gridSize = 20;
 
+        this.gridSize = game.gridSize;
         this.game = game;
 
         this.bullets = 0;
