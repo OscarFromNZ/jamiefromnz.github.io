@@ -36,6 +36,14 @@ class Game {
     }
 
     draw() {
+        /*
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.context.fillStyle = "white";
+        this.context.fillRect(0,0,200,200);
+        this.context.shadowBlur = 20;
+        this.context.shadowColor = "black";
+        this.context.fillRect(50,50,100,100);
+        */
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.players.forEach(player => player.draw(this.context));
         this.food.forEach(foodItem => foodItem.draw(this.context));
@@ -80,7 +88,7 @@ class Game {
                     if (player.x === trailPos.x && player.y === trailPos.y) {
                         if (player.bombs > 0) {
                             this.context.strokeStyle = 'tomato';
-                            otherPlayer.trail.splice(i, 1);
+                            otherPlayer.trail.splice(0, i);
                             player.bombs -= 1;
                         } else {
                             this.gameOver(player);
@@ -132,7 +140,7 @@ class Game {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.running = false;
 
-        this.alert(player.colour + " died.");
+        this.alert(player.colour + " lost!");
     }
 
     restart() {

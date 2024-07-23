@@ -44,25 +44,23 @@ class Player {
     }
 
     draw(context) {
+        context.strokeStyle = this.colour;
+
+        // Set stroke style based on speed
         if (this.speed === 2) {
             context.strokeStyle = 'greenyellow';
         }
 
-        for (let i = 1; i < this.trail.length; i++) {
-            const prevPos = this.trail[i - 1];
-            const currPos = this.trail[i];
+        context.lineWidth = 1;
 
-            context.lineWidth = 20;
+        for (let i = 0; i < this.trail.length; i++) {
+            const pos = this.trail[i];
 
-            // Draw a line between the previous position and the current position
+            // Draw a box at each trail position
             context.beginPath();
-            context.moveTo(prevPos.x + this.gridSize / 2, prevPos.y + this.gridSize / 2);
-            context.lineTo(currPos.x + this.gridSize / 2, currPos.y + this.gridSize / 2);
+            context.rect(pos.x, pos.y, this.gridSize, this.gridSize);
             context.stroke();
         }
-
-        // reset colour
-        context.strokeStyle = this.colour;
     }
 
     // MAKE THIS USE CONSTANTS
@@ -122,7 +120,7 @@ class Player {
     }
 
     shoot() {
-        console.log('shooting');
+        console.log('shooting,', this.colour);
         let bullet = new Bullet(this.x, this.y, this.direction, 2, this.gridSize, this);
         this.game.addBullet(bullet);
         this.bullets -= 1;

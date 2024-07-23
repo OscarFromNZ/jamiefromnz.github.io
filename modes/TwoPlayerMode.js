@@ -14,6 +14,7 @@ class TwoPlayerMode extends Game {
 
         this.generateRandomFood();
         this.generateRandomFood();
+        this.generateRandomFood();
     }
 
     run() {
