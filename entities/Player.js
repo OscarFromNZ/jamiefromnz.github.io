@@ -15,6 +15,8 @@ class Player {
         this.bombs = 0;
         this.hasAnchor = false;
         this.speed = 1;
+
+        this.trailOn = true;
     }
 
     updatePosition() {
@@ -40,7 +42,9 @@ class Player {
     }
 
     updateTrail() {
-        this.trail.push({ x: this.x, y: this.y });
+        if (this.trailOn) {
+            this.trail.push({ x: this.x, y: this.y });
+        }
     }
 
     draw(context) {
@@ -67,6 +71,7 @@ class Player {
         context.shadowBlur = 0;
     }
 
+    // BAD CODE
     // MAKE THIS USE CONSTANTS
     handleInput(key) {
         // Detect if the player is shooting, maybe a better way of doing this
@@ -83,7 +88,13 @@ class Player {
                 this.speedboost();
             }
 
-        } else {
+        } else if (key === 'Enter' && this.keys.enter) {
+            this.trailOn = !this.trailOn;
+
+        } else if (key === 'CapsLock' && this.keys.caps) {
+            this.trailOn = !this.trailOn;
+        }
+        else {
             const newDirection = this.keys[key];
 
             if (!newDirection) return;

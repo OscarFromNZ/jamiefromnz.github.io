@@ -26,8 +26,8 @@ class Game {
         this.checkCollision();
 
         this.players.forEach((player) => {
-            player.updatePosition();
             player.updateTrail();
+            player.updatePosition();
         });
 
         this.bullets.forEach(bullet => bullet.updatePosition());
