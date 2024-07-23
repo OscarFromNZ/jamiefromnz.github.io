@@ -45,6 +45,7 @@ class Game {
         this.context.fillRect(50,50,100,100);
         */
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
         this.players.forEach(player => player.draw(this.context));
         this.food.forEach(foodItem => foodItem.draw(this.context));
         this.bullets.forEach(bullet => bullet.draw(this.context));
