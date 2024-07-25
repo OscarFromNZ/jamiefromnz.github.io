@@ -58,10 +58,10 @@ function createAndAddAI() {
 // KEYS DONT WORK maybe put this in game class
 function createAndAddPlayer() {
     if (game.players.length == 1) {
-        const player = new Player(100, 100, 'right', 'red', { 'w': 'up', 'a': 'left', 's': 'down', 'd': 'right', 'c': 'shoot', 'caos': 'turnOff' }, game);
+        const player = new Player(100, 100, 'right', 'cyan', { 'w': 'up', 'a': 'left', 's': 'down', 'd': 'right', 'c': 'shoot', 'caos': 'turnOff' }, game);
         game.addPlayer(player);
     } else {
-        const player = new Player(500, 500, 'left', 'cyan', { 'ArrowUp': 'up', 'ArrowLeft': 'left', 'ArrowDown': 'down', 'ArrowRight': 'right', 'Shift': 'shoot', 'enter': 'turnOff' }, game);
+        const player = new Player(500, 500, 'left', 'red', { 'ArrowUp': 'up', 'ArrowLeft': 'left', 'ArrowDown': 'down', 'ArrowRight': 'right', 'Shift': 'shoot', 'enter': 'turnOff' }, game);
         game.addPlayer(player);
     }
 }

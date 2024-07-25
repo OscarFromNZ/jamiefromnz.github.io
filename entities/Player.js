@@ -48,7 +48,7 @@ class Player {
     }
 
     draw(context) {
-        const shadowIntensity = Math.random() * 10 + 5;
+        const shadowIntensity = this.speed === 2 ? Math.random() * 10 + 5 : Math.random() * 10 + 10;
         const shadowFlicker = Math.random() > 0.9 ? 'rgba(0, 0, 0, 0)' : this.speed === 2 ? 'greenyellow' : this.colour;
 
         context.shadowColor = shadowFlicker;
