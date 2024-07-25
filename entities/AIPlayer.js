@@ -1,3 +1,5 @@
+// MAKE AI PLAYER BASE CLASS AND MAKE OTHER THINGS EXTEND IT
+
 class AIPlayer extends Player {
     constructor(x, y, direction, colour, keys, game) {
         super(x, y, direction, colour, keys, game);
@@ -6,26 +8,25 @@ class AIPlayer extends Player {
         this.randomMoveFrequency = 0.1; // 10% of the time make a random move
         this.lastDirection = this.direction;
         this.trapHistory = new Set();
-        this.aggressiveMode = false; // Start in aggressive mode
+        this.aggressiveMode = false; // Start in defensive mode
     }
 
-    moveSmartly() {
+    moveSmartly(game) {
         if (Math.random() < this.randomMoveFrequency) {
-            this.direction = this.getRandomDirection(this.game);
+            this.direction = this.getRandomDirection(game);
         } else {
             const targetPosition = this.getTargetPosition();
-            const path = this.calculatePath(this.game, targetPosition);
+            const path = this.calculatePath(game, targetPosition);
 
             if (path.length > 1) {
-                const nextMove = path[1]; // Get the next move
+                const nextMove = path[1];
                 this.direction = this.getDirection(nextMove);
             }
 
-            // Add avoidance and prediction behavior
-            if (this.shouldAvoidTrap(this.game)) {
-                this.direction = this.getSafeDirection(this.game);
-            } else if (this.shouldPredictPlayerMove(this.game)) {
-                this.direction = this.predictPlayerMove(this.game);
+            if (this.shouldAvoidTrap(game)) {
+                this.direction = this.getSafeDirection(game);
+            } else if (this.shouldPredictPlayerMove(game)) {
+                this.direction = this.predictPlayerMove(game);
             }
         }
 
@@ -33,15 +34,19 @@ class AIPlayer extends Player {
     }
 
     updateMode(game) {
-        // Switch between aggressive and defensive modes based on the game state
         const myFreeSpace = this.evaluateSafeArea(this.x, this.y, game);
         const playerFreeSpace = this.evaluateSafeArea(this.target.x, this.target.y, game);
 
-        if (myFreeSpace < playerFreeSpace / 2) {
-            this.aggressiveMode = false; // Switch to defensive mode
-        } else {
-            this.aggressiveMode = true; // Stay in aggressive mode
-        }
+        this.aggressiveMode = myFreeSpace >= playerFreeSpace / 2;
+    }
+
+    isValidMove(nextX, nextY, game) {
+        return (
+            !this.willCollideWithSelf(nextX, nextY) &&
+            !game.willCollideWithOthers(nextX, nextY, this) &&
+            !this.isOutsideCanvas(nextX, nextY, game.canvas.width, game.canvas.height) &&
+            !this.trapHistory.has(`${nextX},${nextY}`)
+        );
     }
 
     getTargetPosition() {
@@ -51,7 +56,13 @@ class AIPlayer extends Player {
     calculatePath(game, targetPosition) {
         const openSet = [];
         const closedSet = new Set();
-        const startNode = { x: this.x, y: this.y, g: 0, f: this.heuristic(this.x, this.y, targetPosition.x, targetPosition.y), parent: null };
+        const startNode = {
+            x: this.x,
+            y: this.y,
+            g: 0,
+            f: this.heuristic(this.x, this.y, targetPosition.x, targetPosition.y),
+            parent: null
+        };
         openSet.push(startNode);
 
         while (openSet.length > 0) {
@@ -111,17 +122,14 @@ class AIPlayer extends Player {
         const neighbors = [];
 
         const potentialMoves = [
-            { x: x + this.gridSize * this.speed, y: y },
-            { x: x - this.gridSize * this.speed, y: y },
-            { x: x, y: y + this.gridSize * this.speed },
-            { x: x, y: y - this.gridSize * this.speed }
+            { x: x + this.gridSize, y: y },
+            { x: x - this.gridSize, y: y },
+            { x: x, y: y + this.gridSize },
+            { x: x, y: y - this.gridSize }
         ];
 
         potentialMoves.forEach(move => {
-            if (!this.willCollideWithSelf(move.x, move.y) &&
-                !game.willCollideWithOthers(move.x, move.y, this) &&
-                !this.isOutsideCanvas(move.x, move.y, game.canvas.width, game.canvas.height) &&
-                !this.trapHistory.has(`${move.x},${move.y}`)) {
+            if (this.isValidMove(move.x, move.y, game)) {
                 neighbors.push(move);
             }
         });
@@ -142,28 +150,26 @@ class AIPlayer extends Player {
         let validDirections = [];
 
         directions.forEach(direction => {
-            if (this.isOppositeDirection(this.lastDirection, direction)) return; // Skip opposite direction
+            if (this.isOppositeDirection(this.lastDirection, direction)) return;
 
             let nextX = this.x;
             let nextY = this.y;
             switch (direction) {
                 case 'up':
-                    nextY -= this.gridSize * this.speed;
+                    nextY -= this.gridSize;
                     break;
                 case 'down':
-                    nextY += this.gridSize * this.speed;
+                    nextY += this.gridSize;
                     break;
                 case 'left':
-                    nextX -= this.gridSize * this.speed;
+                    nextX -= this.gridSize;
                     break;
                 case 'right':
-                    nextX += this.gridSize * this.speed;
+                    nextX += this.gridSize;
                     break;
             }
 
-            if (!this.willCollideWithSelf(nextX, nextY) &&
-                !game.willCollideWithOthers(nextX, nextY, this) &&
-                !this.isOutsideCanvas(nextX, nextY, game.canvas.width, game.canvas.height)) {
+            if (this.isValidMove(nextX, nextY, game)) {
                 validDirections.push(direction);
             }
         });
@@ -172,7 +178,7 @@ class AIPlayer extends Player {
             this.lastDirection = this.direction;
             return validDirections[Math.floor(Math.random() * validDirections.length)];
         } else {
-            return this.direction; // No valid directions found, keep current direction
+            return this.direction;
         }
     }
 
@@ -192,69 +198,62 @@ class AIPlayer extends Player {
     }
 
     shouldAvoidTrap(game) {
-        // Implement logic to check if the AI is heading into a trap
-        const currentDirection = this.direction;
         const directions = ['up', 'down', 'left', 'right'];
         let validDirections = [];
 
         directions.forEach(direction => {
-            if (this.isOppositeDirection(currentDirection, direction)) return; // Skip opposite direction
+            if (this.isOppositeDirection(this.direction, direction)) return;
 
             let nextX = this.x;
             let nextY = this.y;
             switch (direction) {
                 case 'up':
-                    nextY -= this.gridSize * this.speed;
+                    nextY -= this.gridSize;
                     break;
                 case 'down':
-                    nextY += this.gridSize * this.speed;
+                    nextY += this.gridSize;
                     break;
                 case 'left':
-                    nextX -= this.gridSize * this.speed;
+                    nextX -= this.gridSize;
                     break;
                 case 'right':
-                    nextX += this.gridSize * this.speed;
+                    nextX += this.gridSize;
                     break;
             }
 
-            if (!this.willCollideWithSelf(nextX, nextY) &&
-                !game.willCollideWithOthers(nextX, nextY, this) &&
-                !this.isOutsideCanvas(nextX, nextY, game.canvas.width, game.canvas.height)) {
+            if (this.isValidMove(nextX, nextY, game)) {
                 validDirections.push(direction);
             }
         });
 
-        return validDirections.length < 2; // If less than 2 valid directions, we're likely heading into a trap
+        return validDirections.length < 2;
     }
 
     getSafeDirection(game) {
-        // Implement logic to find a safe direction to avoid the trap
         const directions = ['up', 'down', 'left', 'right'];
         let validDirections = [];
 
         directions.forEach(direction => {
-            if (this.isOppositeDirection(this.direction, direction)) return; // Skip opposite direction
+            if (this.isOppositeDirection(this.direction, direction)) return;
 
             let nextX = this.x;
             let nextY = this.y;
             switch (direction) {
                 case 'up':
-                    nextY -= this.gridSize * this.speed;
+                    nextY -= this.gridSize;
                     break;
                 case 'down':
-                    nextY += this.gridSize * this.speed;
+                    nextY += this.gridSize;
                     break;
                 case 'left':
-                    nextX -= this.gridSize * this.speed;
+                    nextX -= this.gridSize;
                     break;
                 case 'right':
-                    nextX += this.gridSize * this.speed;
+                    nextX += this.gridSize;
                     break;
             }
 
-            if (!this.willCollideWithSelf(nextX, nextY) &&
-                !game.willCollideWithOthers(nextX, nextY, this) &&
-                !this.isOutsideCanvas(nextX, nextY, game.canvas.width, game.canvas.height)) {
+            if (this.isValidMove(nextX, nextY, game)) {
                 validDirections.push(direction);
             }
         });
@@ -262,34 +261,32 @@ class AIPlayer extends Player {
         if (validDirections.length > 0) {
             return validDirections[Math.floor(Math.random() * validDirections.length)];
         } else {
-            return this.direction; // No valid directions found, keep current direction
+            return this.direction;
         }
     }
 
     shouldPredictPlayerMove(game) {
-        // Implement logic to predict player's move
         const distance = Math.abs(this.x - this.target.x) + Math.abs(this.y - this.target.y);
-        return distance < 100; // If player is within 100 units, predict their move
+        return distance < 100;
     }
 
     predictPlayerMove(game) {
-        // Implement logic to predict player's move based on their current direction
         const playerDirection = this.target.direction;
         let predictedX = this.target.x;
         let predictedY = this.target.y;
 
         switch (playerDirection) {
             case 'up':
-                predictedY -= this.gridSize * this.speed;
+                predictedY -= this.gridSize;
                 break;
             case 'down':
-                predictedY += this.gridSize * this.speed;
+                predictedY += this.gridSize;
                 break;
             case 'left':
-                predictedX -= this.gridSize * this.speed;
+                predictedX -= this.gridSize;
                 break;
             case 'right':
-                predictedX += this.gridSize * this.speed;
+                predictedX += this.gridSize;
                 break;
         }
 
@@ -303,7 +300,6 @@ class AIPlayer extends Player {
     }
 
     rememberPosition() {
-        // Remember positions to avoid getting trapped in the same spot
         this.trapHistory.add(`${this.x},${this.y}`);
         if (this.trapHistory.size > 100) {
             this.trapHistory.delete(this.trapHistory.values().next().value); // Keep the history size manageable
