@@ -51,7 +51,8 @@ function startGame(mode) {
 }
 
 function createAndAddAI() {
-    const aiPlayer = new AIPlayer(400, 400, 'up', 'pink', {}, game);
+    //const aiPlayer = new AIPlayer(400, 400, 'up', 'pink', {}, game);
+    const aiPlayer = new AIPlayer2(400, 400, 'up', '#fac322', {}, game);
     game.addPlayer(aiPlayer);
 }
 

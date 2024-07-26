@@ -70,7 +70,7 @@ class Game {
     checkCollision() {
         this.players.forEach((player, playerIndex) => {
             // Check if player is outside the canvas
-            if (player.x <= 0 || player.y  <= 0 || player.x >= this.canvas.width || player.y >= this.canvas.height) {
+            if (player.x < 0 || player.y < 0|| player.x >= this.canvas.width || player.y >= this.canvas.height) {
                 this.gameOver(player);
             }
 
